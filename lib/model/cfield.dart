@@ -10,5 +10,17 @@ class CField {
 
   CSize get size => rect.size;
 
-  CSize get cellSize => CSize(width: size.width/cols, height: size.height/rows);
+  double get width => size.width;
+
+  double get height => size.height;
+
+  CSize get cellSize => CSize(width: size.width / cols, height: size.height / rows);
+
+  double get left => rect.left;
+
+  double get right => rect.right;
+
+  double get top => rect.top;
+
+  double get bottom => rect.bottom;
 }

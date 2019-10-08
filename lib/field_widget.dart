@@ -40,9 +40,49 @@ class _FieldWidgetState extends State<FieldWidget> {
       width: field.size.width,
       height: field.size.height,
       decoration: BoxDecoration(border: Border.all(color: Colors.blueAccent)),
-      child: Text(
-        'Field is here',
+      child: CustomPaint(
+        painter: FieldPainter(field),
       ),
     );
+  }
+}
+
+class FieldPainter extends CustomPainter {
+  final CField field;
+
+  FieldPainter(this.field);
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final top = field.top;
+
+    final paint = Paint()
+      ..color = Colors.lightGreenAccent
+      ..strokeWidth = 2;
+
+    for (var i = 1; i < field.cols; i++) {
+      final left = field.cellSize.width * i;
+
+      canvas.drawLine(
+        Offset(left, 0),
+        Offset(left, field.height),
+        paint,
+      );
+    }
+
+    for (var i = 1; i < field.rows; i++) {
+      var top = field.cellSize.height * i;
+
+      canvas.drawLine(
+        Offset(0, top),
+        Offset(field.width, top),
+        paint,
+      );
+    }
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) {
+    return field != (oldDelegate as FieldPainter).field;
   }
 }

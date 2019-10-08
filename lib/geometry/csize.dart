@@ -1,6 +1,6 @@
 class CSize{
-  final num width;
-  final num height;
+  final double width;
+  final double height;
 
   CSize({this.width, this.height});
 }

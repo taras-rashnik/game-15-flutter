@@ -1,10 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'model/cfield.dart';
 import 'model/geometry/cpoint.dart';
 import 'model/geometry/crect.dart';
 import 'model/geometry/csize.dart';
-
 
 class FieldWidget extends StatefulWidget {
   const FieldWidget({
@@ -30,6 +30,7 @@ class _FieldWidgetState extends State<FieldWidget> {
       ),
       cols: 4,
       rows: 6,
+      bricksNumber: 23,
     );
 
     super.initState();
@@ -55,8 +56,76 @@ class FieldPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final top = field.top;
+    _drawGrid(canvas, size);
+    _drawBricks(canvas, size);
+  }
 
+  void _drawBricks(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = Colors.blue
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 2;
+
+    for (var brick in field.bricks) {
+      var center = _toScreenCoords(brick.center);
+
+//      canvas.drawRect(
+//        Rect.fromCenter(
+//          center: center,
+//          width: brick.width,
+//          height: brick.height,
+//        ),
+//        paint,
+//      );
+
+      canvas.drawRRect(
+        RRect.fromRectAndRadius(
+          Rect.fromCenter(
+            center: center,
+            width: brick.width,
+            height: brick.height,
+          ),
+          Radius.circular(brick.cornerRadius),
+        ),
+        paint,
+      );
+
+      canvas.drawCircle(
+        center,
+        brick.width / 3,
+        paint,
+      );
+
+      TextSpan span = new TextSpan(
+        style: new TextStyle(color: Colors.grey[600], fontSize: 35, textBaseline: TextBaseline.alphabetic),
+        text: '${brick.index + 1}',
+      );
+
+      TextPainter tp = new TextPainter(
+        text: span,
+        textAlign: TextAlign.center,
+        textDirection: TextDirection.ltr,
+      );
+
+      tp.layout();
+      tp.paint(
+        canvas,
+        Offset(
+          center.dx - tp.width / 2,
+          center.dy - tp.height / 2,
+        ),
+      );
+    }
+  }
+
+  Offset _toScreenCoords(CPoint point) {
+    return Offset(
+      point.x + field.width / 2,
+      point.y + field.height / 2,
+    );
+  }
+
+  void _drawGrid(Canvas canvas, Size size) {
     final paint = Paint()
       ..color = Colors.lightGreenAccent
       ..strokeWidth = 2;

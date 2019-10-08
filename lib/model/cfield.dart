@@ -15,6 +15,22 @@ class CField {
   CField({this.rect, this.cols, this.rows, int bricksNumber})
       : this.bricks = _generateBricks(rect, cols, rows, bricksNumber, 0.8);
 
+  CSize get size => rect.size;
+
+  double get width => size.width;
+
+  double get height => size.height;
+
+  CSize get cellSize => CSize(width: size.width / cols, height: size.height / rows);
+
+  double get left => rect.left;
+
+  double get right => rect.right;
+
+  double get top => rect.top;
+
+  double get bottom => rect.bottom;
+
   static _generateBricks(CRect rect, int cols, int rows, int number, double brickScale) {
     var cellSize = CSize(
       width: rect.width / cols,
@@ -37,24 +53,15 @@ class CField {
             height: cellSize.height * brickScale,
           ),
         ),
-        cornerRadius: cellSize.width/6,
+        cornerRadius: cellSize.width / 6,
       );
     });
   }
 
-  CSize get size => rect.size;
-
-  double get width => size.width;
-
-  double get height => size.height;
-
-  CSize get cellSize => CSize(width: size.width / cols, height: size.height / rows);
-
-  double get left => rect.left;
-
-  double get right => rect.right;
-
-  double get top => rect.top;
-
-  double get bottom => rect.bottom;
+  CBrick findBrick(CPoint fieldPoint) {
+    return bricks.firstWhere(
+      (b) => b.rect.isInside(fieldPoint),
+      orElse: () => null,
+    );
+  }
 }

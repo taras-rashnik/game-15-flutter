@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:game15/model/cbrick.dart';
 
 import 'model/cfield.dart';
 import 'model/geometry/cpoint.dart';
@@ -36,14 +37,43 @@ class _FieldWidgetState extends State<FieldWidget> {
     super.initState();
   }
 
+  CBrick _selectedBrick;
+
+  CPoint _toFieldCoords(Offset point) {
+    return CPoint(
+      x: point.dx - field.width / 2,
+      y: point.dy - field.height / 2,
+    );
+  }
+
+  void _selectBrick(Offset localPosition){
+    CPoint fieldPoint = _toFieldCoords(localPosition);
+    _selectedBrick = field.findBrick(fieldPoint);
+    print(_selectedBrick.index);
+  }
+
+  void _deselectBrick(){
+    print("_deselectBrick");
+    _selectedBrick = null;
+  }
+
+  void _moveSelectedBrick(Offset delta){
+    if(_selectedBrick == null) return;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: field.size.width,
-      height: field.size.height,
-      decoration: BoxDecoration(border: Border.all(color: Colors.blueAccent)),
-      child: CustomPaint(
-        painter: FieldPainter(field),
+    return GestureDetector(
+      onPanStart: (details){_selectBrick(details.localPosition);},
+      onPanUpdate: (details){_moveSelectedBrick(details.delta);},
+      onPanEnd: (details){_deselectBrick();},
+      child: Container(
+        width: field.size.width,
+        height: field.size.height,
+        decoration: BoxDecoration(border: Border.all(color: Colors.blueAccent)),
+        child: CustomPaint(
+          painter: FieldPainter(field),
+        ),
       ),
     );
   }

@@ -1,4 +1,4 @@
-import 'package:game15/geometry/cpoint.dart';
+import 'cpoint.dart';
 
 class CSegment {
   final CPoint begin;

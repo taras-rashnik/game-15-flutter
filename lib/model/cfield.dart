@@ -1,5 +1,8 @@
-import 'package:game15/geometry/crect.dart';
-import 'package:game15/geometry/csize.dart';
+
+
+
+import 'geometry/crect.dart';
+import 'geometry/csize.dart';
 
 class CField {
   final CRect rect;

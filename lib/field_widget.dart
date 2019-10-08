@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:game15/geometry/cpoint.dart';
-import 'package:game15/geometry/crect.dart';
 
-import 'geometry/csize.dart';
 import 'model/cfield.dart';
+import 'model/geometry/cpoint.dart';
+import 'model/geometry/crect.dart';
+import 'model/geometry/csize.dart';
+
 
 class FieldWidget extends StatefulWidget {
   const FieldWidget({

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'field_widget.dart';
-import 'geometry/csize.dart';
+import 'model/geometry/csize.dart';
+
 
 void main() => runApp(MyApp());
 

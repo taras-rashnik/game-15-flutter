@@ -8,23 +8,42 @@ import 'model/geometry/crect.dart';
 import 'model/geometry/csize.dart';
 
 class FieldWidget extends StatefulWidget {
-  const FieldWidget({
+  FieldWidget({
     Key key,
     @required this.fieldSize,
   }) : super(key: key);
 
   final CSize fieldSize;
 
+  _FieldWidgetState _state;
+
   @override
-  _FieldWidgetState createState() => _FieldWidgetState();
+  _FieldWidgetState createState() {
+    _state = _FieldWidgetState();
+    return _state;
+  }
+
+  void newGame() {_state?.newGame();}
 }
 
 class _FieldWidgetState extends State<FieldWidget> {
-  CField field;
+  CField _field;
 
   @override
   void initState() {
-    field = CField(
+    _field = _generateNewField();
+    super.initState();
+  }
+
+  void newGame() {
+    print('new game');
+    setState(() {
+      _field = _generateNewField();
+    });
+  }
+
+  CField _generateNewField(){
+    return CField(
       rect: CRect(
         center: CPoint(x: 0, y: 0),
         size: widget.fieldSize,
@@ -33,46 +52,52 @@ class _FieldWidgetState extends State<FieldWidget> {
       rows: 6,
       bricksNumber: 23,
     );
-
-    super.initState();
   }
 
   CBrick _selectedBrick;
 
   CPoint _toFieldCoords(Offset point) {
     return CPoint(
-      x: point.dx - field.width / 2,
-      y: point.dy - field.height / 2,
+      x: point.dx - _field.width / 2,
+      y: point.dy - _field.height / 2,
     );
   }
 
-  void _selectBrick(Offset localPosition){
+  void _selectBrick(Offset localPosition) {
     CPoint fieldPoint = _toFieldCoords(localPosition);
-    _selectedBrick = field.findBrick(fieldPoint);
-    print(_selectedBrick.index);
+    _selectedBrick = _field.findBrick(fieldPoint);
   }
 
-  void _deselectBrick(){
-    print("_deselectBrick");
+  void _deselectBrick() {
     _selectedBrick = null;
   }
 
-  void _moveSelectedBrick(Offset delta){
-    if(_selectedBrick == null) return;
+  void _moveSelectedBrick(Offset delta) {
+    if (_selectedBrick == null) return;
+    var newField = _field.tryMoveBrick(_selectedBrick, delta.dx, delta.dy);
+    setState(() {
+      _field = newField;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onPanStart: (details){_selectBrick(details.localPosition);},
-      onPanUpdate: (details){_moveSelectedBrick(details.delta);},
-      onPanEnd: (details){_deselectBrick();},
+      onPanStart: (details) {
+        _selectBrick(details.localPosition);
+      },
+      onPanUpdate: (details) {
+        _moveSelectedBrick(details.delta);
+      },
+      onPanEnd: (details) {
+        _deselectBrick();
+      },
       child: Container(
-        width: field.size.width,
-        height: field.size.height,
+        width: _field.size.width,
+        height: _field.size.height,
         decoration: BoxDecoration(border: Border.all(color: Colors.blueAccent)),
         child: CustomPaint(
-          painter: FieldPainter(field),
+          painter: FieldPainter(_field),
         ),
       ),
     );

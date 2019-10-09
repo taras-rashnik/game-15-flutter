@@ -29,15 +29,17 @@ class MyHomepage extends StatelessWidget {
       height: screenSize.height * 0.7,
     );
 
+    var fieldWidget = new FieldWidget(fieldSize: fieldSize);
+
     return Scaffold(
       appBar: AppBar(
         title: Text("Game '15'"),
       ),
       body: Center(
-        child: new FieldWidget(fieldSize: fieldSize),
+        child: fieldWidget,
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: (){print('new game');},
+        onPressed: (){fieldWidget.newGame();},
         tooltip: 'New game',
         child: Icon(Icons.add),
       ),

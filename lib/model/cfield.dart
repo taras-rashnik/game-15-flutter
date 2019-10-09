@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:game15/model/cbrick.dart';
 
 import 'geometry/cpoint.dart';
@@ -64,4 +65,32 @@ class CField {
       orElse: () => null,
     );
   }
+
+  CField tryMoveBrick(CBrick brick, double dx, double dy) {
+    var newField = clone();
+    var newBrick = newField.bricks[brick.index];
+    newBrick.rect.center.x += dx;
+    newBrick.rect.center.y += dy;
+    return newField;
+  }
+
+  CField clone()=> CField._(rect: rect.clone(), cols: cols, rows: rows, bricks: bricks.map((b) => b.clone()).toList());
+
+  final _listEquality = ListEquality<CBrick>();
+
+  @override
+  bool operator ==(other) {
+    if (other is! CField) return false;
+    final CField typedOther = other;
+    return cols == typedOther.cols &&
+        rows == typedOther.rows &&
+        rect == typedOther.rect &&
+        _listEquality.equals(bricks, typedOther.bricks);
+  }
+
+  @override
+  int get hashCode => cols.hashCode ^ rows.hashCode ^ rect.hashCode ^ _listEquality.hash(bricks);
+
+  @override
+  String toString() => 'CField(rect: $rect, cols: $cols, rows: $rows)';
 }

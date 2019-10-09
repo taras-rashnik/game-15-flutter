@@ -23,7 +23,9 @@ class FieldWidget extends StatefulWidget {
     return _state;
   }
 
-  void newGame() {_state?.newGame();}
+  void newGame() {
+    _state?.newGame();
+  }
 }
 
 class _FieldWidgetState extends State<FieldWidget> {
@@ -42,7 +44,7 @@ class _FieldWidgetState extends State<FieldWidget> {
     });
   }
 
-  CField _generateNewField(){
+  CField _generateNewField() {
     return CField(
       rect: CRect(
         center: CPoint(x: 0, y: 0),
@@ -95,7 +97,10 @@ class _FieldWidgetState extends State<FieldWidget> {
       child: Container(
         width: _field.size.width,
         height: _field.size.height,
-        decoration: BoxDecoration(border: Border.all(color: Colors.blueAccent)),
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.deepOrange[400], width: 2),
+          color: Colors.deepOrange[100],
+        ),
         child: CustomPaint(
           painter: FieldPainter(_field),
         ),
@@ -116,10 +121,22 @@ class FieldPainter extends CustomPainter {
   }
 
   void _drawBricks(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = Colors.blue
+    var gradient2 = LinearGradient(
+      begin: Alignment.topCenter,
+      end: Alignment.bottomCenter,
+      colors: [Color.fromARGB(0xFF, 0xE8, 0xE8, 0xE8), Color.fromARGB(0xFF, 0xC0, 0xC0, 0xC0)],
+    );
+
+    var gradient1 = LinearGradient(
+      begin: Alignment.topRight,
+      end: Alignment.bottomLeft,
+      colors: [Color.fromARGB(0xFF, 0xB3, 0xB3, 0xB3), Color.fromARGB(0xFF, 0xFF, 0xFF, 0xFF)],
+    );
+
+    final paint3 = Paint()
+      ..color = Color.fromARGB(0xFF, 0xB3, 0xB3, 0xB3)
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 2;
+      ..strokeWidth = 1;
 
     for (var brick in field.bricks) {
       var center = _toScreenCoords(brick.center);
@@ -133,26 +150,33 @@ class FieldPainter extends CustomPainter {
 //        paint,
 //      );
 
-      canvas.drawRRect(
-        RRect.fromRectAndRadius(
-          Rect.fromCenter(
-            center: center,
-            width: brick.width,
-            height: brick.height,
-          ),
-          Radius.circular(brick.cornerRadius),
-        ),
-        paint,
+      var rect = Rect.fromCenter(
+        center: center,
+        width: brick.width,
+        height: brick.height,
       );
+
+      final paint2 = Paint()..shader = gradient2.createShader(rect);
+
+      var rRect = RRect.fromRectAndRadius(
+        rect,
+        Radius.circular(brick.cornerRadius),
+      );
+
+      canvas.drawRRect(rRect, paint2);
+
+      canvas.drawRRect(rRect, paint3);
+
+      final paint1 = Paint()..shader = gradient1.createShader(rect);
 
       canvas.drawCircle(
         center,
-        brick.width / 3,
-        paint,
+        brick.width / 2.5,
+        paint1,
       );
 
       TextSpan span = new TextSpan(
-        style: new TextStyle(color: Colors.grey[600], fontSize: 35, textBaseline: TextBaseline.alphabetic),
+        style: new TextStyle(color: Colors.red, fontSize: 40, textBaseline: TextBaseline.alphabetic),
         text: '${brick.index + 1}',
       );
 
@@ -182,7 +206,7 @@ class FieldPainter extends CustomPainter {
 
   void _drawGrid(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = Colors.lightGreenAccent
+      ..color = Colors.deepOrange[300]
       ..strokeWidth = 2;
 
     for (var i = 1; i < field.cols; i++) {

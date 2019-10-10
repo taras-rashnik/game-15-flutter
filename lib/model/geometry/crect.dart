@@ -7,9 +7,12 @@ class CRect {
   final CPoint center;
   final CSize size;
 
-  CRect({this.center, this.size});
+  const CRect({this.center, this.size});
 
   CRect clone() => CRect(center: center.clone(), size: size.clone());
+
+  CRect shift(double dx, double dy) =>
+      CRect(center: center.shift(dx, dy), size: size);
 
   get left => center.x - size.width / 2;
 
@@ -23,12 +26,13 @@ class CRect {
 
   get height => size.height;
 
-  CSegment1d get verticalSegment => CSegment1d(begin: top, end: bottom);
+  CSegment1d get verticalSegment => CSegment1d(top, bottom);
 
-  CSegment1d get horizontalSegment => CSegment1d(begin: left, end: right);
+  CSegment1d get horizontalSegment => CSegment1d(left, right);
 
   bool isInside(CPoint fieldPoint) {
-    return verticalSegment.isInside(fieldPoint.y) && horizontalSegment.isInside(fieldPoint.x);
+    return verticalSegment.isInside(fieldPoint.y) &&
+        horizontalSegment.isInside(fieldPoint.x);
   }
 
   @override

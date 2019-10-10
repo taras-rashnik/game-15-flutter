@@ -4,7 +4,7 @@ class CSegment {
   final CPoint begin;
   final CPoint end;
 
-  CSegment({this.begin, this.end});
+  const CSegment({this.begin, this.end});
 
   CSegment clone() => CSegment(begin: begin.clone(), end: end.clone());
 
@@ -19,5 +19,5 @@ class CSegment {
   int get hashCode => begin.hashCode ^ end.hashCode;
 
   @override
-  String toString() => 'CSegment(begin: ${begin}, end: ${end})';
+  String toString() => 'CSegment(begin: $begin, end: $end)';
 }

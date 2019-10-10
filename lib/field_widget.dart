@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:game15/bloc/bloc.dart';
 import 'package:game15/model/cbrick.dart';
 
 import 'model/cfield.dart';
@@ -8,102 +10,69 @@ import 'model/geometry/crect.dart';
 import 'model/geometry/csize.dart';
 
 class FieldWidget extends StatefulWidget {
-  FieldWidget({
-    Key key,
-    @required this.fieldSize,
-  }) : super(key: key);
-
-  final CSize fieldSize;
-
-  _FieldWidgetState _state;
+  FieldWidget({Key key}) : super(key: key);
 
   @override
   _FieldWidgetState createState() {
-    _state = _FieldWidgetState();
-    return _state;
-  }
-
-  void newGame() {
-    _state?.newGame();
+    return _FieldWidgetState();
   }
 }
 
 class _FieldWidgetState extends State<FieldWidget> {
-  CField _field;
+  // CBrick _selectedBrick;
 
-  @override
-  void initState() {
-    _field = _generateNewField();
-    super.initState();
-  }
-
-  void newGame() {
-    print('new game');
-    setState(() {
-      _field = _generateNewField();
-    });
-  }
-
-  CField _generateNewField() {
-    return CField(
-      rect: CRect(
-        center: CPoint(x: 0, y: 0),
-        size: widget.fieldSize,
-      ),
-      cols: 4,
-      rows: 6,
-      bricksNumber: 23,
-    );
-  }
-
-  CBrick _selectedBrick;
-
-  CPoint _toFieldCoords(Offset point) {
-    return CPoint(
-      x: point.dx - _field.width / 2,
-      y: point.dy - _field.height / 2,
-    );
-  }
+  // CPoint _toFieldCoords(Offset point) {
+  //   return CPoint(
+  //     point.dx - _field.width / 2,
+  //     point.dy - _field.height / 2,
+  //   );
+  // }
 
   void _selectBrick(Offset localPosition) {
-    CPoint fieldPoint = _toFieldCoords(localPosition);
-    _selectedBrick = _field.findBrick(fieldPoint);
+    // CPoint fieldPoint = _toFieldCoords(localPosition);
+    // _selectedBrick = _field.findBrick(fieldPoint);
   }
 
   void _deselectBrick() {
-    _selectedBrick = null;
+    // _selectedBrick = null;
   }
 
   void _moveSelectedBrick(Offset delta) {
-    if (_selectedBrick == null) return;
-    var newField = _field.tryMoveBrick(_selectedBrick, delta.dx, delta.dy);
-    setState(() {
-      _field = newField;
-    });
+    // if (_selectedBrick == null) return;
+    // var newField = _field.tryMoveBrick(_selectedBrick, delta.dx, delta.dy);
+    // setState(() {
+    //   _field = newField;
+    // });
   }
 
   @override
   Widget build(BuildContext context) {
+    var fieldBloc = BlocProvider.of<FieldBloc>(context);
+
     return GestureDetector(
       onPanStart: (details) {
-        _selectBrick(details.localPosition);
+        fieldBloc.dispatch(SelectBrickEvent(details.localPosition.dx, details.localPosition.dy));
       },
       onPanUpdate: (details) {
-        _moveSelectedBrick(details.delta);
+        fieldBloc.dispatch(MoveBrickEvent(details.delta.dx, details.delta.dy));
       },
       onPanEnd: (details) {
-        _deselectBrick();
+        fieldBloc.dispatch(DeselectBrickEvent());
       },
-      child: Container(
-        width: _field.size.width,
-        height: _field.size.height,
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.deepOrange[400], width: 2),
-          color: Colors.deepOrange[100],
-        ),
-        child: CustomPaint(
-          painter: FieldPainter(_field),
-        ),
+      child: BlocBuilder<FieldBloc, CField>(
+        builder: (context, field) {
+          return Container(
+            width: field.size.width,
+            height: field.size.height,
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.deepOrange[400], width: 2),
+              color: Colors.deepOrange[100],
+            ),
+            child: CustomPaint(
+              painter: FieldPainter(field),
+            ),
+          );
+        },
       ),
     );
   }
@@ -124,13 +93,19 @@ class FieldPainter extends CustomPainter {
     var gradient2 = LinearGradient(
       begin: Alignment.topCenter,
       end: Alignment.bottomCenter,
-      colors: [Color.fromARGB(0xFF, 0xE8, 0xE8, 0xE8), Color.fromARGB(0xFF, 0xC0, 0xC0, 0xC0)],
+      colors: [
+        Color.fromARGB(0xFF, 0xE8, 0xE8, 0xE8),
+        Color.fromARGB(0xFF, 0xC0, 0xC0, 0xC0)
+      ],
     );
 
     var gradient1 = LinearGradient(
       begin: Alignment.topRight,
       end: Alignment.bottomLeft,
-      colors: [Color.fromARGB(0xFF, 0xB3, 0xB3, 0xB3), Color.fromARGB(0xFF, 0xFF, 0xFF, 0xFF)],
+      colors: [
+        Color.fromARGB(0xFF, 0xB3, 0xB3, 0xB3),
+        Color.fromARGB(0xFF, 0xFF, 0xFF, 0xFF)
+      ],
     );
 
     final paint3 = Paint()
@@ -176,7 +151,10 @@ class FieldPainter extends CustomPainter {
       );
 
       TextSpan span = new TextSpan(
-        style: new TextStyle(color: Colors.red, fontSize: 40, textBaseline: TextBaseline.alphabetic),
+        style: new TextStyle(
+            color: Colors.red,
+            fontSize: 40,
+            textBaseline: TextBaseline.alphabetic),
         text: '${brick.index + 1}',
       );
 

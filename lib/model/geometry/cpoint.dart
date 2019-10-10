@@ -1,10 +1,14 @@
 class CPoint {
-  double x;
-  double y;
+  final double x;
+  final double y;
 
-  CPoint({this.x, this.y});
+  const CPoint(this.x, this.y);
 
-  CPoint clone() => CPoint(x: x, y: y);
+  factory CPoint.origin() => CPoint(0, 0);
+
+  CPoint clone() => CPoint(x, y);
+
+  CPoint shift(double dx, double dy) => CPoint(x + dx, y + dy);
 
   @override
   bool operator ==(other) {

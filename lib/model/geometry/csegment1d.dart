@@ -4,7 +4,7 @@ class CSegment1d {
   final double begin;
   final double end;
 
-  CSegment1d({this.begin, this.end});
+  const CSegment1d(this.begin, this.end);
 
   bool isInside(double x) {
     var a = min(begin, end);
@@ -23,5 +23,6 @@ class CSegment1d {
   int get hashCode => begin.hashCode ^ end.hashCode;
 
   @override
-  String toString() => 'CSegment1d(${begin?.toStringAsFixed(1)}, ${end?.toStringAsFixed(1)})';
+  String toString() =>
+      'CSegment1d(${begin?.toStringAsFixed(1)}, ${end?.toStringAsFixed(1)})';
 }

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:game15/bloc/bloc.dart';
 
 import 'field_widget.dart';
 import 'model/geometry/csize.dart';
-
 
 void main() => runApp(MyApp());
 
@@ -14,7 +15,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: new MyHomepage(),
+      home: MyHomepage(),
     );
   }
 }
@@ -25,25 +26,38 @@ class MyHomepage extends StatelessWidget {
     var screenSize = MediaQuery.of(context).size;
 
     var fieldSize = CSize(
-      width: screenSize.width * 0.9,
-      height: screenSize.height * 0.7,
+      screenSize.width * 0.9,
+      screenSize.height * 0.7,
     );
 
-    var fieldWidget = new FieldWidget(fieldSize: fieldSize);
-
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Game '15'"),
-      ),
-      body: Center(
-        child: fieldWidget,
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: (){fieldWidget.newGame();},
-        tooltip: 'New game',
-        child: Icon(Icons.add),
+    return BlocProvider<FieldBloc>(
+      builder: (context) => FieldBloc(fieldSize),
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text("Game '15'"),
+        ),
+        body: Center(
+          child: FieldWidget(),
+        ),
+        floatingActionButton: new NewGameButton(),
       ),
     );
   }
 }
 
+class NewGameButton extends StatelessWidget {
+  const NewGameButton({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return FloatingActionButton(
+      onPressed: () {
+        BlocProvider.of<FieldBloc>(context).dispatch(NewGameEvent());
+      },
+      tooltip: 'New game',
+      child: Icon(Icons.add),
+    );
+  }
+}

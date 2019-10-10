@@ -2,7 +2,7 @@ class CVector {
   final double x;
   final double y;
 
-  CVector(this.x, this.y);
+  const CVector(this.x, this.y);
 
   CVector clone() => CVector(x, y);
 

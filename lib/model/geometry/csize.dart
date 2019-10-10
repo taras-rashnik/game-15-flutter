@@ -1,10 +1,14 @@
-class CSize{
+class CSize {
   final double width;
   final double height;
 
-  CSize({this.width, this.height});
+  const CSize(this.width, this.height);
 
-  CSize clone() => CSize(width: width, height: height);
+  factory CSize.zero() => CSize(0, 0);
+
+  CSize clone() => CSize(width, height);
+
+  CSize operator *(double scale) => CSize(width * scale, height * scale);
 
   @override
   bool operator ==(other) {
@@ -17,5 +21,6 @@ class CSize{
   int get hashCode => width.hashCode ^ height.hashCode;
 
   @override
-  String toString() => 'CSize(${width?.toStringAsFixed(1)}, ${height?.toStringAsFixed(1)})';
+  String toString() =>
+      'CSize(${width?.toStringAsFixed(1)}, ${height?.toStringAsFixed(1)})';
 }

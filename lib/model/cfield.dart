@@ -11,10 +11,27 @@ class CField {
   final int rows;
   final List<CBrick> bricks;
 
-  CField._({this.rect, this.cols, this.rows, this.bricks});
+  final _listEquality = const ListEquality<CBrick>();
+
+  const CField._({this.rect, this.cols, this.rows, this.bricks});
 
   CField({this.rect, this.cols, this.rows, int bricksNumber})
       : this.bricks = _generateBricks(rect, cols, rows, bricksNumber, 0.8);
+
+  CField clone() => CField._(
+      rect: rect.clone(),
+      cols: cols,
+      rows: rows,
+      bricks: bricks.map((b) => b.clone()).toList());
+
+  CField shiftBrick(int index, double dx, double dy) {
+    var newBricks = bricks
+        .map((b) => index == b.index ? b.shift(dx, dy) : b.clone())
+        .toList();
+
+    return CField._(
+        rect: rect.clone(), cols: cols, rows: rows, bricks: newBricks);
+  }
 
   CSize get size => rect.size;
 
@@ -22,7 +39,7 @@ class CField {
 
   double get height => size.height;
 
-  CSize get cellSize => CSize(width: size.width / cols, height: size.height / rows);
+  CSize get cellSize => CSize(size.width / cols, size.height / rows);
 
   double get left => rect.left;
 
@@ -32,10 +49,11 @@ class CField {
 
   double get bottom => rect.bottom;
 
-  static _generateBricks(CRect rect, int cols, int rows, int number, double brickScale) {
+  static _generateBricks(
+      CRect rect, int cols, int rows, int number, double brickScale) {
     var cellSize = CSize(
-      width: rect.width / cols,
-      height: rect.height / rows,
+      rect.width / cols,
+      rect.height / rows,
     );
 
     return List<CBrick>.generate(number, (i) {
@@ -46,13 +64,11 @@ class CField {
         index: i,
         rect: CRect(
           center: CPoint(
-            x: rect.left + col * cellSize.width + cellSize.width / 2,
-            y: rect.top + row * cellSize.height + cellSize.height / 2,
+            // TODO: rect.center.shift()
+            rect.left + col * cellSize.width + cellSize.width / 2,
+            rect.top + row * cellSize.height + cellSize.height / 2,
           ),
-          size: CSize(
-            width: cellSize.width * brickScale,
-            height: cellSize.height * brickScale,
-          ),
+          size: cellSize * brickScale,
         ),
         cornerRadius: cellSize.width / 6,
       );
@@ -67,16 +83,8 @@ class CField {
   }
 
   CField tryMoveBrick(CBrick brick, double dx, double dy) {
-    var newField = clone();
-    var newBrick = newField.bricks[brick.index];
-    newBrick.rect.center.x += dx;
-    newBrick.rect.center.y += dy;
-    return newField;
+    return shiftBrick(brick.index, dx, dy);
   }
-
-  CField clone()=> CField._(rect: rect.clone(), cols: cols, rows: rows, bricks: bricks.map((b) => b.clone()).toList());
-
-  final _listEquality = ListEquality<CBrick>();
 
   @override
   bool operator ==(other) {
@@ -89,7 +97,11 @@ class CField {
   }
 
   @override
-  int get hashCode => cols.hashCode ^ rows.hashCode ^ rect.hashCode ^ _listEquality.hash(bricks);
+  int get hashCode =>
+      cols.hashCode ^
+      rows.hashCode ^
+      rect.hashCode ^
+      _listEquality.hash(bricks);
 
   @override
   String toString() => 'CField(rect: $rect, cols: $cols, rows: $rows)';

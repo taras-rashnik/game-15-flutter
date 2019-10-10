@@ -8,8 +8,8 @@ main() {
   test('tect CField equiality', () {
     var field = CField(
       rect: CRect(
-        center: CPoint(x: 0, y: 0),
-        size: CSize(width: 200, height: 300),
+        center: CPoint.origin(),
+        size: CSize(200, 300),
       ),
       cols: 4,
       rows: 6,
@@ -20,9 +20,7 @@ main() {
     expect(clonedField, equals(field));
 
     //
-    var newBrick = clonedField.bricks[2];
-    newBrick.rect.center.x += 100;
-    newBrick.rect.center.y += 100;
-    expect(clonedField, isNot(equals(field)));
+    var shiftedField = field.shiftBrick(2, 100, 0);
+    expect(shiftedField, isNot(equals(field)));
   });
 }

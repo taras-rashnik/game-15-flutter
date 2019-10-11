@@ -19,7 +19,7 @@ class FieldState extends Equatable {
         ),
         cols: 4,
         rows: 6,
-        bricksNumber: 22,
+        bricksNumber: 16,
       ),
       -1,
     );

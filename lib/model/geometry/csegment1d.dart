@@ -25,4 +25,14 @@ class CSegment1d {
   @override
   String toString() =>
       'CSegment1d(${begin?.toStringAsFixed(1)}, ${end?.toStringAsFixed(1)})';
+
+  bool overlaps(CSegment1d otherSegment) {
+    if (begin < otherSegment.begin && otherSegment.begin <= end) return true;
+    if (begin < otherSegment.end && otherSegment.end <= end) return true;
+
+    if (otherSegment.begin < begin && begin <= otherSegment.end) return true;
+    if (otherSegment.begin < end && end <= otherSegment.end) return true;
+
+    return false;
+  }
 }

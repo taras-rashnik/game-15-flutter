@@ -1,4 +1,5 @@
 import 'cpoint.dart';
+import 'csegment1d.dart';
 
 class CSegment {
   final CPoint begin;
@@ -18,4 +19,8 @@ class CSegment {
 
   @override
   String toString() => 'CSegment(begin: $begin, end: $end)';
+
+  CSegment1d toVertical1d() => CSegment1d(begin.y, end.y);
+
+  CSegment1d toHorizontal1d() => CSegment1d(begin.x, end.x);
 }

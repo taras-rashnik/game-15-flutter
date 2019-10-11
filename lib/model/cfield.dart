@@ -105,14 +105,29 @@ class CField {
     return newField;
   }
 
+  List<CBrick> findRightNeighbours(CBrick newBrick) {
+    return [];
+  }
+
+  List<CBrick> findTopRightNeighbours(CBrick newBrick) {
+    return [];
+  }
+
+  List<CBrick> findBottomRightNeighbours(CBrick newBrick) {
+    return [];
+  }
+
   CField _shiftBrickRight(int index, double distance) {
     assert(distance > 0);
 
     final newBrick = bricks[index].shift(distance, 0);
-    if(newBrick.rect.right > rect.right) return this;
-    
-    var newBricks =
-        bricks.map((b) => index == b.index ? newBrick : b).toList();
+    if (newBrick.rect.right > rect.right) return this;
+
+    final rightNeighbours = findRightNeighbours(newBrick);
+    final topRightNeighbours = findTopRightNeighbours(newBrick);
+    final bottomRightNeighbours = findBottomRightNeighbours(newBrick);
+
+    var newBricks = bricks.map((b) => index == b.index ? newBrick : b).toList();
 
     return CField._(rect: rect, cols: cols, rows: rows, bricks: newBricks);
   }
@@ -140,20 +155,19 @@ class CField {
         .rotateRight90();
   }
 
-  CField rotateRight90() {
-    var newBricks = bricks.map((b) => b.rotateRight90()).toList();
+  CField rotateRight90() => CField._(
+        rect: rect.rotateRight90(),
+        cols: rows,
+        rows: cols,
+        bricks: bricks.map((b) => b.rotateRight90()).toList(),
+      );
 
-    return CField._(
-      rect: rect.rotateRight90(),
-      cols: rows,
-      rows: cols,
-      bricks: newBricks,
-    );
-  }
-
-  CField rotateLeft90() {
-    return this.rotateRight90().rotateRight90().rotateRight90();
-  }
+  CField rotateLeft90() => CField._(
+        rect: rect.rotateLeft90(),
+        cols: rows,
+        rows: cols,
+        bricks: bricks.map((b) => b.rotateLeft90()).toList(),
+      );
 
   @override
   bool operator ==(other) {

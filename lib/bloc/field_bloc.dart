@@ -1,8 +1,5 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
-import 'package:game15/model/cfield.dart';
-import 'package:game15/model/geometry/cpoint.dart';
-import 'package:game15/model/geometry/crect.dart';
 import 'package:game15/model/geometry/csize.dart';
 import './bloc.dart';
 

@@ -10,8 +10,6 @@ class FieldState extends Equatable {
 
   const FieldState(this.field, this.selectedBrickIndex);
 
-  FieldState clone() => FieldState(field, selectedBrickIndex);
-
   factory FieldState.initial(CSize fieldSize) {
     return FieldState(
       CField(
@@ -32,7 +30,7 @@ class FieldState extends Equatable {
 
   FieldState shiftBrick(double dx, double dy) {
     return selectedBrickIndex < 0
-        ? clone()
+        ? this
         : FieldState(
             field.shiftBrick(selectedBrickIndex, dx, dy),
             selectedBrickIndex,

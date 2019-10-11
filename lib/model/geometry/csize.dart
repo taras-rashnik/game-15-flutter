@@ -6,8 +6,6 @@ class CSize {
 
   factory CSize.zero() => CSize(0, 0);
 
-  CSize clone() => CSize(width, height);
-
   CSize operator *(double scale) => CSize(width * scale, height * scale);
 
   @override

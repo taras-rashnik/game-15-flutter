@@ -6,8 +6,6 @@ class CPoint {
 
   factory CPoint.origin() => CPoint(0, 0);
 
-  CPoint clone() => CPoint(x, y);
-
   CPoint shift(double dx, double dy) => CPoint(x + dx, y + dy);
 
   @override

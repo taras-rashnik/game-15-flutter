@@ -18,19 +18,16 @@ class CField {
   CField({this.rect, this.cols, this.rows, int bricksNumber})
       : this.bricks = _generateBricks(rect, cols, rows, bricksNumber, 0.8);
 
-  CField clone() => CField._(
-      rect: rect.clone(),
-      cols: cols,
-      rows: rows,
-      bricks: bricks.map((b) => b.clone()).toList());
-
   CField shiftBrick(int index, double dx, double dy) {
+    return _shiftBrickALittle(index, dx, dy);
+  }
+
+  CField _shiftBrickALittle(int index, double dx, double dy) {
     var newBricks = bricks
-        .map((b) => index == b.index ? b.shift(dx, dy) : b.clone())
+        .map((b) => index == b.index ? b.shift(dx, dy) : b)
         .toList();
 
-    return CField._(
-        rect: rect.clone(), cols: cols, rows: rows, bricks: newBricks);
+    return CField._(rect: rect, cols: cols, rows: rows, bricks: newBricks);
   }
 
   CSize get size => rect.size;

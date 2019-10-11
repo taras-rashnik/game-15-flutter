@@ -9,8 +9,6 @@ class CRect {
 
   const CRect({this.center, this.size});
 
-  CRect clone() => CRect(center: center.clone(), size: size.clone());
-
   CRect shift(double dx, double dy) =>
       CRect(center: center.shift(dx, dy), size: size);
 

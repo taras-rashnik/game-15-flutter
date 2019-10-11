@@ -2,12 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game15/bloc/bloc.dart';
-import 'package:game15/model/cbrick.dart';
 
 import 'model/cfield.dart';
 import 'model/geometry/cpoint.dart';
-import 'model/geometry/crect.dart';
-import 'model/geometry/csize.dart';
 
 class FieldWidget extends StatefulWidget {
   FieldWidget({Key key}) : super(key: key);

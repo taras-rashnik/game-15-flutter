@@ -10,8 +10,6 @@ class CBrick {
 
   const CBrick({this.index, this.rect, this.cornerRadius});
 
-  CBrick clone() => CBrick(index: index, rect: rect.clone(), cornerRadius: cornerRadius);
-
   CBrick shift(double dx, double dy) => CBrick(index: index, rect: rect.shift(dx, dy), cornerRadius: cornerRadius);
 
   CPoint get center => rect.center;

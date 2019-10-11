@@ -4,8 +4,6 @@ class CVector {
 
   const CVector(this.x, this.y);
 
-  CVector clone() => CVector(x, y);
-
   @override
   bool operator ==(other) {
     if (other is! CVector) return false;

@@ -6,8 +6,6 @@ class CSegment {
 
   const CSegment({this.begin, this.end});
 
-  CSegment clone() => CSegment(begin: begin.clone(), end: end.clone());
-
   @override
   bool operator ==(other) {
     if (other is! CSegment) return false;

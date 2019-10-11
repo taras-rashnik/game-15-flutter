@@ -18,18 +18,6 @@ class CField {
   CField({this.rect, this.cols, this.rows, int bricksNumber})
       : this.bricks = _generateBricks(rect, cols, rows, bricksNumber, 0.8);
 
-  CField shiftBrick(int index, double dx, double dy) {
-    return _shiftBrickALittle(index, dx, dy);
-  }
-
-  CField _shiftBrickALittle(int index, double dx, double dy) {
-    var newBricks = bricks
-        .map((b) => index == b.index ? b.shift(dx, dy) : b)
-        .toList();
-
-    return CField._(rect: rect, cols: cols, rows: rows, bricks: newBricks);
-  }
-
   CSize get size => rect.size;
 
   double get width => size.width;
@@ -47,7 +35,12 @@ class CField {
   double get bottom => rect.bottom;
 
   static _generateBricks(
-      CRect rect, int cols, int rows, int number, double brickScale) {
+    CRect rect,
+    int cols,
+    int rows,
+    int number,
+    double brickScale,
+  ) {
     var cellSize = CSize(
       rect.width / cols,
       rect.height / rows,
@@ -61,7 +54,6 @@ class CField {
         index: i,
         rect: CRect(
           center: CPoint(
-            // TODO: rect.center.shift()
             rect.left + col * cellSize.width + cellSize.width / 2,
             rect.top + row * cellSize.height + cellSize.height / 2,
           ),
@@ -79,8 +71,41 @@ class CField {
     );
   }
 
-  CField tryMoveBrick(CBrick brick, double dx, double dy) {
-    return shiftBrick(brick.index, dx, dy);
+  CField shiftBrick(int index, double dx, double dy) {
+    final count = 10;
+    var ddx = dx / count;
+    var ddy = dy / count;
+
+    CField oldField = this;
+    for (int i = 0; i < count; i++) {
+      CField newField = oldField._shiftBrickALittle(index, ddx, ddy);
+      if(oldField == newField){
+        break;
+      }
+      oldField = newField;
+    }
+
+    return oldField;
+  }
+
+  CField _shiftBrickALittle(int index, double dx, double dy) {
+    var newBricks =
+        bricks.map((b) => index == b.index ? b.shift(dx, dy) : b).toList();
+
+    return CField._(rect: rect, cols: cols, rows: rows, bricks: newBricks);
+  }
+
+  CField _shiftBrickRight(int index, double distance) {
+    assert(distance > 0);
+  }
+
+  CField _shiftBrickLeft(int index, double distance) {
+  }
+
+  CField _shiftBrickDown(int index, double distance) {
+  }
+
+  CField _shiftBrickUp(int index, double distance) {
   }
 
   @override

@@ -38,8 +38,8 @@ class _FieldWidgetState extends State<FieldWidget> {
             width: fieldState.field.size.width+9,
             height: fieldState.field.size.height+9,
             decoration: BoxDecoration(
-              border: Border.all(color: Colors.deepOrange[400], width: 4),
-              color: Colors.deepOrange[100],
+              border: Border.all(color: Color.fromARGB(0xFF, 0xD3, 0x5D, 0x2D), width: 4),
+              color: Color.fromARGB(0xFF, 0xFF, 0x8D, 0x2D),
             ),
             child: CustomPaint(
               painter: FieldPainter(fieldState.field),
@@ -67,8 +67,10 @@ class FieldPainter extends CustomPainter {
       begin: Alignment.topCenter,
       end: Alignment.bottomCenter,
       colors: [
-        Color.fromARGB(0xFF, 0xE8, 0xE8, 0xE8),
-        Color.fromARGB(0xFF, 0xC0, 0xC0, 0xC0)
+        // Color.fromARGB(0xFF, 0xFF, 0xBD, 0x33),
+        // Color.fromARGB(0xFF, 0xFF, 0xA1, 0x4F)
+        Colors.orange[300],
+        Colors.orange[700]
       ],
     );
 
@@ -76,13 +78,16 @@ class FieldPainter extends CustomPainter {
       begin: Alignment.topRight,
       end: Alignment.bottomLeft,
       colors: [
-        Color.fromARGB(0xFF, 0xB3, 0xB3, 0xB3),
-        Color.fromARGB(0xFF, 0xFF, 0xFF, 0xFF)
+        // Color.fromARGB(0xFF, 0xFF, 0x80, 0x35),
+        // Color.fromARGB(0xFF, 0xFD, 0xC3, 0x34)
+        Colors.orange[700],
+        Colors.orange[200]
       ],
     );
 
     final paint3 = Paint()
-      ..color = Color.fromARGB(0xFF, 0xA3, 0xA3, 0xA3)
+      // ..color = Color.fromARGB(0xFF, 0xA3, 0xA3, 0xA3)
+      ..color = Colors.orange[700]
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
 
@@ -125,8 +130,8 @@ class FieldPainter extends CustomPainter {
 
       TextSpan span = new TextSpan(
         style: new TextStyle(
-            color: Colors.red,
-            fontSize: 40,
+            color: Color.fromARGB(0xFF, 0xF3, 0xF7, 0xFA),
+            fontSize: 55,
             textBaseline: TextBaseline.alphabetic),
         text: '${brick.index + 1}',
       );
@@ -142,7 +147,7 @@ class FieldPainter extends CustomPainter {
         canvas,
         Offset(
           center.dx - tp.width / 2,
-          center.dy - tp.height / 2,
+          center.dy - tp.height / 2 + 2,
         ),
       );
     }
@@ -157,7 +162,7 @@ class FieldPainter extends CustomPainter {
 
   void _drawGrid(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = Colors.deepOrange[300]
+      ..color = Colors.deepOrange[400]
       ..strokeWidth = 2;
 
     for (var i = 1; i < field.cols; i++) {

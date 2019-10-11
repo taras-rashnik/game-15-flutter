@@ -19,31 +19,6 @@ class FieldWidget extends StatefulWidget {
 }
 
 class _FieldWidgetState extends State<FieldWidget> {
-  // CBrick _selectedBrick;
-
-  // CPoint _toFieldCoords(Offset point) {
-  //   return CPoint(
-  //     point.dx - _field.width / 2,
-  //     point.dy - _field.height / 2,
-  //   );
-  // }
-
-  void _selectBrick(Offset localPosition) {
-    // CPoint fieldPoint = _toFieldCoords(localPosition);
-    // _selectedBrick = _field.findBrick(fieldPoint);
-  }
-
-  void _deselectBrick() {
-    // _selectedBrick = null;
-  }
-
-  void _moveSelectedBrick(Offset delta) {
-    // if (_selectedBrick == null) return;
-    // var newField = _field.tryMoveBrick(_selectedBrick, delta.dx, delta.dy);
-    // setState(() {
-    //   _field = newField;
-    // });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,17 +34,17 @@ class _FieldWidgetState extends State<FieldWidget> {
       onPanEnd: (details) {
         fieldBloc.dispatch(DeselectBrickEvent());
       },
-      child: BlocBuilder<FieldBloc, CField>(
-        builder: (context, field) {
+      child: BlocBuilder<FieldBloc, FieldState>(
+        builder: (context, fieldState) {
           return Container(
-            width: field.size.width,
-            height: field.size.height,
+            width: fieldState.field.size.width,
+            height: fieldState.field.size.height,
             decoration: BoxDecoration(
               border: Border.all(color: Colors.deepOrange[400], width: 2),
               color: Colors.deepOrange[100],
             ),
             child: CustomPaint(
-              painter: FieldPainter(field),
+              painter: FieldPainter(fieldState.field),
             ),
           );
         },

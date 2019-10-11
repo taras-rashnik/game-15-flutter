@@ -20,4 +20,8 @@ class CPoint {
 
   @override
   String toString() => 'CPoint(${x?.toStringAsFixed(1)}, ${y?.toStringAsFixed(1)})';
+
+  CPoint rotateRight90() => CPoint(y, -x);
+
+  CPoint rotateLeft90() => CPoint(-y, x);
 }

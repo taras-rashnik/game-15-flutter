@@ -45,4 +45,8 @@ class CRect {
 
   @override
   String toString() => 'CRect(center: $center, size: $size)';
+
+  CRect rotateRight90() => CRect(center: center.rotateRight90(), size: size.rotateRight90());
+
+  CRect rotateLeft90() => CRect(center: center.rotateLeft90(), size: size.rotateLeft90());
 }

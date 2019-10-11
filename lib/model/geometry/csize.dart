@@ -21,4 +21,8 @@ class CSize {
   @override
   String toString() =>
       'CSize(${width?.toStringAsFixed(1)}, ${height?.toStringAsFixed(1)})';
+
+  CSize rotateRight90() => CSize(height, width);
+
+  CSize rotateLeft90() => CSize(height, width);
 }

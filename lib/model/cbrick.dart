@@ -20,6 +20,14 @@ class CBrick {
 
   double get height => size.height;
 
+  CBrick rotateRight90(){
+    return CBrick(index: index, rect: rect.rotateRight90(), cornerRadius: cornerRadius);
+  }
+
+  CBrick rotateLeft90(){
+    return CBrick(index: index, rect: rect.rotateLeft90(), cornerRadius: cornerRadius);
+  }
+
   @override
   bool operator ==(other) {
     if (other is! CBrick) return false;

@@ -33,6 +33,7 @@ class MyHomepage extends StatelessWidget {
     return BlocProvider<FieldBloc>(
       builder: (context) => FieldBloc(fieldSize),
       child: Scaffold(
+        backgroundColor: Colors.lightBlue[100],
         appBar: AppBar(
           title: Text("Game '15'"),
         ),

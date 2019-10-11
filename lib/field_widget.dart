@@ -34,10 +34,11 @@ class _FieldWidgetState extends State<FieldWidget> {
       child: BlocBuilder<FieldBloc, FieldState>(
         builder: (context, fieldState) {
           return Container(
-            width: fieldState.field.size.width,
-            height: fieldState.field.size.height,
+            padding: EdgeInsets.all(1),
+            width: fieldState.field.size.width+9,
+            height: fieldState.field.size.height+9,
             decoration: BoxDecoration(
-              border: Border.all(color: Colors.deepOrange[400], width: 2),
+              border: Border.all(color: Colors.deepOrange[400], width: 4),
               color: Colors.deepOrange[100],
             ),
             child: CustomPaint(
@@ -81,9 +82,9 @@ class FieldPainter extends CustomPainter {
     );
 
     final paint3 = Paint()
-      ..color = Color.fromARGB(0xFF, 0xB3, 0xB3, 0xB3)
+      ..color = Color.fromARGB(0xFF, 0xA3, 0xA3, 0xA3)
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 1;
+      ..strokeWidth = 2;
 
     for (var brick in field.bricks) {
       var center = _toScreenCoords(brick.center);
@@ -99,8 +100,8 @@ class FieldPainter extends CustomPainter {
 
       var rect = Rect.fromCenter(
         center: center,
-        width: brick.width,
-        height: brick.height,
+        width: brick.width-4,
+        height: brick.height-4,
       );
 
       final paint2 = Paint()..shader = gradient2.createShader(rect);

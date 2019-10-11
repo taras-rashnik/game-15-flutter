@@ -16,7 +16,7 @@ class CField {
   const CField._({this.rect, this.cols, this.rows, this.bricks});
 
   CField({this.rect, this.cols, this.rows, int bricksNumber})
-      : this.bricks = _generateBricks(rect, cols, rows, bricksNumber, 0.8);
+      : this.bricks = _generateBricks(rect, cols, rows, bricksNumber, 0.99);
 
   CSize get size => rect.size;
 
@@ -59,7 +59,7 @@ class CField {
           ),
           size: cellSize * brickScale,
         ),
-        cornerRadius: cellSize.width / 6,
+        cornerRadius: cellSize.width / 12,
       );
     });
   }
@@ -123,11 +123,47 @@ class CField {
   }
 
   List<CBrick> findTopRightNeighbours(CBrick newBrick) {
-    return [];
+    final neighbours = <CBrick>[];
+    for (var brick in bricks) {
+      if (brick.index == newBrick.index) continue;
+      if (brick.center.x <= newBrick.center.x) continue;
+
+      if (newBrick.right > brick.left) {
+        var topRightSegment = newBrick.topRightSegment.rotateRight45();
+        var bottomLeftSegment = brick.bottomLeftSegment.rotateRight45();
+
+        if (!topRightSegment
+            .toVertical1d()
+            .overlaps(bottomLeftSegment.toVertical1d())) continue;
+
+        if (topRightSegment.begin.x > bottomLeftSegment.begin.x)
+          neighbours.add(brick);
+      }
+    }
+
+    return neighbours;
   }
 
   List<CBrick> findBottomRightNeighbours(CBrick newBrick) {
-    return [];
+    final neighbours = <CBrick>[];
+    for (var brick in bricks) {
+      if (brick.index == newBrick.index) continue;
+      if (brick.center.x <= newBrick.center.x) continue;
+
+      if (newBrick.right > brick.left) {
+        var bottomRightSegment = newBrick.bottomRightSegment.rotateLeft45();
+        var topLeftSegment = brick.topLeftSegment.rotateLeft45();
+
+        if (!bottomRightSegment
+            .toVertical1d()
+            .overlaps(topLeftSegment.toVertical1d())) continue;
+
+        if (bottomRightSegment.begin.x > topLeftSegment.begin.x)
+          neighbours.add(brick);
+      }
+    }
+
+    return neighbours;
   }
 
   CField _shiftBrickRight(int index, double distance) {
@@ -143,14 +179,36 @@ class CField {
       bricks: bricks.map((b) => index == b.index ? newBrick : b).toList(),
     );
 
+    // push other bricks right
     final rightNeighbours = findRightNeighbours(newBrick);
-    final topRightNeighbours = findTopRightNeighbours(newBrick);
-    final bottomRightNeighbours = findBottomRightNeighbours(newBrick);
-
     for (var rightNeighbour in rightNeighbours) {
-      final rField = newField._shiftBrickRight(rightNeighbour.index, distance);
-      if (rField == newField) return this;
-      newField = rField;
+      final tmpField =
+          newField._shiftBrickRight(rightNeighbour.index, distance);
+
+      if (tmpField == newField) return this;
+      newField = tmpField;
+    }
+
+    // push other bricks right and up
+    final topRightNeighbours = findTopRightNeighbours(newBrick);
+    for (var topRightNeighbour in topRightNeighbours) {
+      final tmpField = newField
+          ._shiftBrickRight(topRightNeighbour.index, distance)
+          ._shiftBrickUp(topRightNeighbour.index, distance);
+
+      if (tmpField == newField) return this;
+      newField = tmpField;
+    }
+
+    // push other bricks right and down
+    final bottomRightNeighbours = findBottomRightNeighbours(newBrick);
+    for (var bottomRightNeighbour in bottomRightNeighbours) {
+      final tmpField = newField
+          ._shiftBrickRight(bottomRightNeighbour.index, distance)
+          ._shiftBrickDown(bottomRightNeighbour.index, distance);
+
+      if (tmpField == newField) return this;
+      newField = tmpField;
     }
 
     return newField;

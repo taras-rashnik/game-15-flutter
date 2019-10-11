@@ -23,4 +23,7 @@ class CSegment {
   CSegment1d toVertical1d() => CSegment1d(begin.y, end.y);
 
   CSegment1d toHorizontal1d() => CSegment1d(begin.x, end.x);
+
+  CSegment rotateRight45() => CSegment(begin: begin.rotateRight45(), end: end.rotateRight45());
+  CSegment rotateLeft45() => CSegment(begin: begin.rotateLeft45(), end: end.rotateLeft45());
 }

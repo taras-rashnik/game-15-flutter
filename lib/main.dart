@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game15/bloc/bloc.dart';
@@ -24,11 +26,9 @@ class MyHomepage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var screenSize = MediaQuery.of(context).size;
+    var length = min(screenSize.width, screenSize.height) * 0.9;
 
-    var fieldSize = CSize(
-      screenSize.width * 0.9,
-      screenSize.height * 0.7,
-    );
+    var fieldSize = CSize(length, length);
 
     return BlocProvider<FieldBloc>(
       builder: (context) => FieldBloc(fieldSize),

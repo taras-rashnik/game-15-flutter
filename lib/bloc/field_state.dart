@@ -18,8 +18,8 @@ class FieldState extends Equatable {
           size: fieldSize,
         ),
         cols: 4,
-        rows: 6,
-        bricksNumber: 16,
+        rows: 4,
+        bricksNumber: 15,
       ),
       -1,
     );

@@ -25,8 +25,35 @@ class CBrick {
   double get top => rect.top;
   double get bottom => rect.bottom;
 
-  CSegment get rightSegment => CSegment(begin: CPoint(right, top), end: CPoint(right, bottom));
-  CSegment get leftSegment => CSegment(begin: CPoint(left, top), end: CPoint(left, bottom));
+  CSegment get rightSegment => CSegment(
+        begin: CPoint(right, top + cornerRadius),
+        end: CPoint(right, bottom - cornerRadius),
+      );
+
+  CSegment get leftSegment => CSegment(
+        begin: CPoint(left, top + cornerRadius),
+        end: CPoint(left, bottom - cornerRadius),
+      );
+
+  CSegment get topRightSegment => CSegment(
+        begin: CPoint(right - cornerRadius, top),
+        end: CPoint(right, top + cornerRadius),
+      );
+
+  CSegment get topLeftSegment => CSegment(
+        begin: CPoint(left + cornerRadius, top),
+        end: CPoint(left, top + cornerRadius),
+      );
+
+  CSegment get bottomRightSegment => CSegment(
+        begin: CPoint(right, bottom - cornerRadius),
+        end: CPoint(right - cornerRadius, bottom),
+      );
+
+  CSegment get bottomLeftSegment => CSegment(
+        begin: CPoint(left, bottom - cornerRadius),
+        end: CPoint(left + cornerRadius, bottom),
+      );
 
   CBrick rotateRight90() {
     return CBrick(

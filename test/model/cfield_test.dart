@@ -29,7 +29,7 @@ main() {
 
     expect(clonedField, equals(field));
 
-    var shiftedField = field.shiftBrick(2, 100, 0);
+    var shiftedField = field.shiftBrick(2, 0.1, 0);
     expect(shiftedField, isNot(equals(field)));
   });
 }
